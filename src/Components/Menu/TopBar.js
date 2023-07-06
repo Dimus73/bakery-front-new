@@ -98,7 +98,7 @@ const TopBar = () =>{
 
 				<div className="col-5 col-md-3 mb-2 mb-md-0 text-center">
 						<Link to="/" className="d-inline-flex link-body-emphasis text-decoration-none">
-							<img src="/img/logo.jpeg" alt="ffff"  width="80" height="60" />
+							<img src="/img/Logo.jpeg" alt="ffff"  width="80" height="60" />
 							<svg className="bi" width="40" height="32" role="img" aria-label="Bootstrap">
 							</svg>
 						</Link>
