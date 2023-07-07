@@ -259,8 +259,16 @@ const CreateTask = () => {
 			setTask({...task}); 
 		}
 
-
 	}
+
+	// ---------------------------
+	// Callback function called to remove recipe from task
+	// ---------------------------
+	const removeRecipe = (e, i) => {
+		task.taskList = task.taskList.filter ((value,index) => index !== i );
+		setTask({...task}); 
+	}
+
 
 	// console.log('Before return', user, task);
 
@@ -289,10 +297,11 @@ const CreateTask = () => {
 											<th className='col-1'>Unit</th>
 											<th className='col-2 text-end'>Task numbers</th>
 											<th className='col-2'>Total</th>
+											<th className='col-2'></th>
 										</tr>
 									</thead>
 									<tbody>
-											{task.taskList.map ((value,i) => <TaskRow item={value} recipeList = {recipeList} i={i} choseRecipe={choseRecipe} changeQuantity={changeQuantity} />) }
+											{task.taskList.map ((value,i) => <TaskRow item={value} recipeList={recipeList} i={i} choseRecipe={choseRecipe} changeQuantity={changeQuantity} removeRecipe={removeRecipe} />) }
 									</tbody>
 								</table>
 							</div>
@@ -338,6 +347,10 @@ const TaskRow = (props) => {
 			</td>
 			<td className="col-2" >
 				{props.item.totalQuantity}
+			</td>
+			<td className='align-middle text-center ' >
+				<i className="bi bi-x-square" style={{'font-size': '1.3rem', color: "#BD302D"}}
+					onClick={(e) => {props.removeRecipe (e, props.i) }}></i>
 			</td>
 		</tr>
 	)

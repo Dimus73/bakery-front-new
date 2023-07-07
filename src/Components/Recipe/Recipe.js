@@ -196,9 +196,18 @@ const Recipe = (props) => {
 			},
 			body : JSON.stringify (data)
 		}
-		// await fetch (URL, reqData)
 		try {
-			await fetch (URL, reqData)	
+			console.log('Result:','result');
+			const result = await fetch (URL, reqData);
+			const resultJS = await result.json();
+			console.log('Result:',result);
+			if (result.ok){
+				alert('The document was successfully saved and completed');
+				navigate (-1);
+			} else {
+				alert(`Error saving Document. Status: ${result.status}. Message: ${resultJS.msg}`)
+			}
+	
 		} catch (error) {
 			console.log(`Error while saving recipe. Message: ${error}`);
 			alert (`Error while saving recipe. Message: ${error}`)
