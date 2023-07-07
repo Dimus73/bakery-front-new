@@ -25,7 +25,7 @@ const TaskList = () => {
 		try {
 			const data = await fetch (URL, reqData);
 			const dataJS = await data.json();
-			console.log('GET List dataJS =>', dataJS);
+			// console.log('GET List dataJS =>', dataJS);
 			if (data.ok) {
 				setTaskList ( [...dataJS] );
 				setActiveTask ( dataJS[0].id )

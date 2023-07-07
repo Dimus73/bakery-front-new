@@ -40,6 +40,8 @@ const Document = (props) => {
 			ingredientId : '',
 			quantity : 0,
 			cost : 0,
+			stock : 0,
+			stockCost : 0,
 
 			unit_name : '',
 			totalCost : 0,
@@ -68,7 +70,8 @@ const Document = (props) => {
 
 	const getIngredientsList = async () => {
 		const BASE_URL = process.env.REACT_APP_BASE_URL
-		const URL = BASE_URL + '/api/catalog/ingredients'
+		// const URL = BASE_URL + '/api/catalog/ingredients'
+		const URL = BASE_URL + '/api/warehouse/ingrdetail'
 
 		const reqData = {
 			method : 'GET',
@@ -109,7 +112,7 @@ const Document = (props) => {
 	// ---------------------------
 	const getDocument = async (id) => {
 		const BASE_URL = process.env.REACT_APP_BASE_URL
-		const URL = BASE_URL + '/api/warehouse/'+id
+		const URL = BASE_URL + '/api/warehouse/document/'+id
 
 		const reqData = {
 			method : 'GET',
@@ -241,9 +244,14 @@ const Document = (props) => {
 		const currentIngredient = ingredientsList.filter ((value => value.id === Number(currentId)))
 
 		documentList[i].ingredientId = currentId;
-		// documentList[i].ingredientName = currentIngredient[0].name;
 		documentList[i].unit_name = currentIngredient[0].unit_name; 	
-			
+		documentList[i].stock = currentIngredient[0].qountity; 	
+		documentList[i].stockCost = currentIngredient[0].costt.toFixed(2); 	
+		if ( document.type === DOCUMENT_TYPE.SPAN) {
+			console.log('In span document', documentList[i].cost, documentList[i].quantity);
+			documentList[i].cost = currentIngredient[0].costt
+			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ).toFixed(2);
+		}	
 		if (!('id' in documentList[i])){
 			documentList[i].id=0;
 		}
@@ -269,7 +277,7 @@ const Document = (props) => {
 		const currentQuantity = e.target.value;
 		if ( !isNaN(currentQuantity) ){
 			documentList[i].quantity = currentQuantity;
-			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ); 
+			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ).toFixed(2); 
 			setDocumentList([...documentList]); 
 		}
 	}
@@ -311,28 +319,56 @@ const Document = (props) => {
 			<input type="date" name='taskDate' value={document.date} 
 				onChange={(e)=> setDocument({...document, date:e.target.value})}/>
 			<div className='row'>
-				<div className='col-6'>
+				<div className='col-10'>
 					<div className='container'>
 						<div className='row'>
 							<div>
 								<table className='table table-hover'>
-									<thead>
-										<tr>
-											<th className='col-1'>No</th>
-											<th className='col-4'>ingredient</th>
-											<th className='col-1'>Unit</th>
-											<th className='col-2 text-end'>Cost per one</th>
-											<th className='col-2 text-end'>Quantity</th>
-											<th className='col-2 text-end'>Total</th>
-										</tr>
-									</thead>
-									<tbody>
-											{documentList.map ((value,i) => <DocumentRow item={value} 
-											ingredientsList = {ingredientsList} i={i} 
-											choseIngredient = {choseIngredient} 
-											changeQuantity  = {changeQuantity} 
-											changeCost      = {changeCost}/>) }
-									</tbody>
+
+									{document.type === DOCUMENT_TYPE.PURCHASE ? 
+									(<>
+										<thead>
+											<tr>
+												<th className='col-1'>No</th>
+												<th className='col-4'>ingredient</th>
+												<th className='col-1'>Unit</th>
+												<th className='col-2 text-end'>Cost per one</th>
+												<th className='col-2 text-end'>Quantity</th>
+												<th className='col-2 text-end'>Total</th>
+											</tr>
+										</thead>
+										<tbody>
+												{documentList.map ((value,i) => <DocumentRowPurchase item={value}
+												ingredientsList = {ingredientsList} i={i}
+												choseIngredient = {choseIngredient}
+												changeQuantity  = {changeQuantity}
+												changeCost      = {changeCost}/>) }
+										</tbody>
+									</>)
+									:
+									(<>
+										<thead>
+											<tr>
+												<th className='col-1'>No</th>
+												<th className='col-4'>ingredient</th>
+												<th className='col-1'>Unit</th>
+												<th className='col-1 text-end'>Cost</th>
+												<th className='col-1 text-end'>Stock</th>
+												<th className='col-1 text-end'>Quantity</th>
+												<th className='col-1 text-end'>Total</th>
+											</tr>
+										</thead>
+										<tbody>
+												{documentList.map ((value,i) => <DocumentRowSpan item={value}
+												ingredientsList = {ingredientsList} i={i}
+												choseIngredient = {choseIngredient}
+												changeQuantity  = {changeQuantity}
+												changeCost      = {changeCost}/>) }
+										</tbody>
+									</>)
+                }
+
+
 								</table>
 							</div>
 						</div>
@@ -346,14 +382,14 @@ const Document = (props) => {
 			:
 			<h4>Task is in work. View mode</h4> 
 			}
-			<button className='btn btn-primary m-3' onClick={ () => saveNewDocument (EDIT_MODE.EDIT, DOCUMENT_STATUS.COMPLETED) } >Save & Completed</button>
+			<button className='btn btn-primary m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.COMPLETED) } >Save & Completed</button>
 			<button className='btn btn-primary m-3' onClick={ () => navigate(-1) } >Close</button> 
 		</div>
 	)
 }
 
 
-const DocumentRow = (props) => {
+const DocumentRowPurchase = (props) => {
 	return (
 		<tr key={props.i} >
 			<td className="col-1" >{props.i+1}</td>
@@ -379,6 +415,37 @@ const DocumentRow = (props) => {
 		</tr>
 	)
 }
+
+const DocumentRowSpan = (props) => {
+	return (
+		<tr key={props.i} >
+			<td className="col-1" >{props.i+1}</td>
+			<td className="col-4" >
+				<select name="ingredientId" id="" value={props.item.ingredientId} onChange={(e) => props.choseIngredient(e,props.i)} >
+					<option value="" disabled selected ></option>
+						{props.ingredientsList.map ( ( value,i ) => 
+								<option key={i} value={value.id} >{value.name}</option>)}
+				</select>
+			</td>
+			<td className="col-1" >
+				{props.item.unit_name}
+			</td>
+			<td className="col-1" >
+				{props.item.stockCost}
+			</td>
+			<td className="col-1" >
+				{props.item.stock}
+			</td>
+			<td className='col-2'>
+				<input  className='text-end w-100' type="text" name="quantity" value={props.item.quantity} onChange={(e) => props.changeQuantity (e, props.i)} /> 
+			</td>
+			<td className="col-2 text-end" >
+				{props.item.totalCost}
+			</td>
+		</tr>
+	)
+}
+
 
 export default Document
 

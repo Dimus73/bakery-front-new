@@ -16,6 +16,8 @@ import RecipeDetailView from './Components/Recipe/RecipeDetailView';
 
 import CreateTask       from './Components/Task/CreateTask';
 import TaskList         from './Components/Task/TaskList';
+import Document         from './Components/Warehouse/Document';
+import DocumentList     from './Components/Warehouse/DocumentList';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
@@ -42,6 +44,11 @@ function App() {
         <Route path='task/list'             element={<TaskList/>} />
         <Route path='task/:id'              element={<CreateTask/>} />
 
+        <Route path='warehouse/purchase'    element={<Document docType={'purchase'}/>} />
+        <Route path='warehouse/span'        element={<Document docType={'span'}/>} />
+        <Route path='warehouse/'            element={<DocumentList />} />
+        <Route path='warehouse/:id'         element={<Document />} />
+
         <Route path='*'                     element={<PageNoFound />} />
       </Route>
     </Routes>
@@ -52,8 +59,3 @@ function App() {
 export default App;
 
 
-{/* <div className="App">
-<header className="App-header">
-  <Ingredients />
-</header>
-</div> */}
