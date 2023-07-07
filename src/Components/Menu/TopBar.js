@@ -114,7 +114,7 @@ const TopBar = () =>{
 										<span className='navbar-text'>{user.username}</span>
 									</div>
 									<div className='col-1'>
-										<i className="bi bi-box-arrow-in-right navbar-text" style={{'font-size': '1.8rem', color: 'black'}} onClick={logOut}></i>
+										<i className="bi bi-box-arrow-in-right navbar-text" style={{'fontSize': '1.8rem', color: 'black'}} onClick={logOut}></i>
 									</div>
 								</div>
 								:

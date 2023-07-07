@@ -4,22 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
 import { EDIT_MODE, DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
 
-// const EDIT_MODE ={
-// 	CREATE : 'create',
-// 	EDIT   : 'edit',
-// 	VIEW   : 'view',
-// }
-
-// const DOCUMENT_STATUS = {
-// 	DRAFT     : 'draft',
-// 	COMPLETED : 'completed',
-// }
-
-// const DOCUMENT_TYPE = {
-// 	PURCHASE : 'purchase',
-// 	SPAN     : 'span' 
-// }
-
 
 
 const Document = (props) => {
@@ -108,7 +92,7 @@ const Document = (props) => {
 	},[])
 
 	// ---------------------------
-	// Function for getting task in edit mode
+	// Function for getting document in edit mode
 	// ---------------------------
 	const getDocument = async (id) => {
 		const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -128,6 +112,7 @@ const Document = (props) => {
 			if (result.ok){
 				setEditMode(EDIT_MODE.EDIT);
 				resultJS.docDetail.push({...blankDocumentTable})
+
 				setDocumentList ([...resultJS.docDetail])
 				delete resultJS.docDetail;
 				setDocument ({...resultJS})
@@ -154,7 +139,6 @@ const Document = (props) => {
 
 		const data = clearData(documentList)
 
-	// 	// console.log('Client DATA to save', data, mode);
 		if (documentDetailCheck ( data )) {
 			const reqData = {
 				// method : 'POST',
@@ -222,13 +206,25 @@ const Document = (props) => {
 	// Control data before sending it to the server
 	// ---------------------------
 	const documentDetailCheck = (documentDetail) => {
+
 		if ( documentDetail.length === 0 ) {
 			alert ('The document must contain at least one record')
 			return false;
 		}
-		if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <=0 )){
-			alert ('In the quantity and cost fields must be a number greater than zero')
-			return false;
+		if ( document.type === DOCUMENT_TYPE.SPAN) {
+			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <=0 )){
+				alert ('In the quantity and cost fields must be a number greater than zero')
+				return false;
+			}
+		} else {
+			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <=0 )){
+				alert ('In the quantity and cost fields must be a number greater than zero')
+				return false;
+			}
+			if (documentDetail.some ((value) => (document.status != DOCUMENT_STATUS.DRAFT) && (value.stock < 0 || value.stock < value.quantity) ) ) {
+				alert('There is not enough ingredient in stock. Please replenish stock before transfer to production')
+				return false
+			}
 		}
 		return true;
 	}
@@ -248,7 +244,7 @@ const Document = (props) => {
 		documentList[i].stock = currentIngredient[0].qountity; 	
 		documentList[i].stockCost = currentIngredient[0].costt.toFixed(2); 	
 		if ( document.type === DOCUMENT_TYPE.SPAN) {
-			console.log('In span document', documentList[i].cost, documentList[i].quantity);
+			// console.log('In span document', documentList[i].cost, documentList[i].quantity);
 			documentList[i].cost = currentIngredient[0].costt
 			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ).toFixed(2);
 		}	
