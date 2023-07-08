@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
+import './Registry.css'
 
 const Registry = () => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -54,16 +55,47 @@ const Registry = () => {
 	}
 
 	return(
+		// <div>
+		// 	<form onSubmit={addUser} action="submit">
+		// 		<label htmlFor="username">Username:</label>
+		// 		<input type="text" name='username' />
+		// 		<label htmlFor="password1">Enter password:</label>
+		// 		<input type="text" name='password1'/>
+		// 		<label htmlFor="password2">Reenter password</label>
+		// 		<input type="text" name='password2'/>
+		// 		<button type='submit'>Registry</button>
+		// 	</form>
+		// </div>
 		<div>
-			<form onSubmit={addUser} action="submit">
-				<label htmlFor="username">Username:</label>
-				<input type="text" name='username' />
-				<label htmlFor="password1">Enter password:</label>
-				<input type="text" name='password1'/>
-				<label htmlFor="password2">Reenter password</label>
-				<input type="text" name='password2'/>
-				<button type='submit'>Registry</button>
-			</form>
+			<div className='container'>
+				<div className='row justify-content-center'>
+					<div className='col-4 bg-white p-0'>
+						<div className='m-3' style={{backgroundColor:'#FDEDDA'}}>
+							<main class="form-signin w-100 m-auto">
+								<form className='form-signin' action="" onSubmit={addUser}>
+									<div className='row jd-flex align-items-center justify-content-center'>
+										<img class="mb-4" src="/img/logo.svg" alt=""  height="90" />
+									</div>
+									<div class="form-floating mb-4">
+										<input type="text" class="form-control" id="floatingInput" placeholder="password" name="username" />
+										<label for="floatingInput">Login</label>
+									</div>
+									<div class="form-floating mb-4 ">
+										<input type="password" class="form-control" id="floatingPassword" placeholder="Password 1" name="password1"/>
+										<label for="floatingPassword">Password 1</label>
+									</div>
+									<div class="form-floating mb-4 ">
+										<input type="password" class="form-control" id="floatingPassword" placeholder="Password 2" name="password2"/>
+										<label for="floatingPassword">Password 2</label>
+									</div>
+									<button class="btn btn-danger w-100 py-2" type="submit">Registry</button>
+								</form>
+							</main>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	)
 }

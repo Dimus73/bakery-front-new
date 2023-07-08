@@ -201,7 +201,7 @@ const nameUpdateValidation = (id, name) => {
 	return (
 	<div className='container'>
 		<h6 className=''>Catalog | Ingredients</h6	>
-		<div className='container bg-white p-5'>
+		<div className='container bg-white p-5 shadow-lg'>
 			<div className='row font-comfortaa'>
 				<div className='col-lg-2'></div>
 				<div className='col-12 col-lg-4'>

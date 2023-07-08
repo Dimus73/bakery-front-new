@@ -195,22 +195,28 @@ const nameUpdateValidation = (id, name) => {
 
 	return (
 	<div className='container'>
-		<h3 className=''>Catalog | Equipment</h3	>
-		<div className='container '>
-			<div className='row justify-content-md-center'>
-				<div className='col-6'>
-					<form action="">
-						<input type="text" value={searchStr} onChange={(e) => setSearchStr(e.target.value)} placeholder='Enter to filter'/>
-						<button onClick={(e) => { e.preventDefault(); setSearchStr('') }} >Clear</button>
-						<button onClick={handleShowModal}>modal</button>
-					</form>
+		<h6 className=''>Catalog | Equipment</h6	>
+		<div className='container bg-white p-5 shadow-lg'>
+			<div className='row font-comfortaa'>
+			<div className='col-lg-2'></div>
+				<div className='col-12 col-lg-4'>
+						<form action="">
+							<div className='row'>
+								<div className='col-10'>
+									<input className='form-control' type="text" value={searchStr} onChange={(e) => setSearchStr(e.target.value)} placeholder='Enter to filter'/>
+								</div>
+								<div className='col-1'>
+									<i className="bi bi-x-square" style={{'font-size': '1.8rem', color: "#BD302D"}} onClick={(e) => { e.preventDefault(); setSearchStr('') }}></i>
+								</div>
+							</div>
+						</form>
 				</div>
 			</div>
 			<div className='row justify-content-md-center'>
-				<div className=' col-8 mt-3 p-3' >
+				<div className=' col-12 col-lg-8 mt-3 p-3' >
 					<div className='scroll_div'>
-						<table className='table table-primary'>
-							<thead>
+						<table className='table '>
+							<thead  className='font-comfortaa'>
 								<tr>
 									<td>Equipment</td>
 									<td>Quantity</td>
@@ -218,7 +224,7 @@ const nameUpdateValidation = (id, name) => {
 									<td></td>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody className='font-roboto'>
 								{equipmentsFiltered.map((value,i) => <GetEquipment item={value} editButton = {pushEditButton} i={i} updateIngredient = {updateEquipment}/>)}
 							</tbody>
 						</table>
@@ -227,8 +233,9 @@ const nameUpdateValidation = (id, name) => {
 			</div>
 		<div>
 		</div >
-			<div className='row justify-content-md-center'>
-				<div className='form-box col-6 mt-3 p-3'>
+			<div className='row justify-content-md-start'>
+			<div className='col-lg-2'></div>
+			<div className='form-box col-12 col-lg-6 mt-3 p-3'>
 					{currentItem.equipment ?
 						<UpdateForm item = {currentItem} updateEquipment={updateEquipment} cancelUpdate={cancelUpdate} />
 						:
@@ -262,8 +269,17 @@ const GetEquipment = (props) => {
 		<tr key={props.i}>
 			<td>{props.item.equipment}</td>
 			<td>{props.item.quantity}</td>
-			<td><button onClick={() => props.editButton (props.item)}>Edit</button></td>
-			<td><button onClick={() => props.updateIngredient ({...props.item, active:false}) }>Deactivate</button></td>
+
+			<td className='align-middle text-center ' >
+				<i className="bi bi-pencil" style={{'font-size': '1.3rem', color: "#BD302D"}}
+					onClick={() => props.editButton (props.item)}></i>
+			</td>
+
+			<td className='align-middle text-center ' >
+				<i className="bi bi-x-square" style={{'font-size': '1.3rem', color: "#BD302D"}}
+					onClick={() => props.updateIngredient ({...props.item, active:false}) }></i>
+			</td>
+
 		</tr>
 	)
 }
@@ -280,15 +296,23 @@ const AddForm = (props) => {
 		
 	return (
 		<>
-			<div>Add new equipment:</div>
-			<form onSubmit={props.addEquipment} action="">
-				<label htmlFor="equipment">Equipment:</label>
-				<input onChange={(e) => setCurrentItem ({...currentItem, equipment:e.target.value}) }
-							type="text" name='equipment'  value = {currentItem.equipment}/>
-				<label htmlFor="quantity">Quantity:</label>
-				<input onChange={(e) => setCurrentItem ({...currentItem, quantity:e.target.value}) }
-							name='quantity' value = {currentItem.quantity} />
-				<button type='submit'>Add</button>
+			<div className='row'>
+				<div>new</div>
+			</div>
+			<form className='font-comfortaa' onSubmit={props.addEquipment} action="">
+				<div className='row justify-content-md-center' >
+					<div className='col-7'>
+						<input className='form-control' onChange={(e) => setCurrentItem ({...currentItem, equipment:e.target.value}) }
+									type="text" name='equipment'  value = {currentItem.equipment}/>
+					</div>
+					<div className='col-3'>
+						<input className='form-control' onChange={(e) => setCurrentItem ({...currentItem, quantity:e.target.value}) }
+									name='quantity' value = {currentItem.quantity} />
+					</div>
+					<div  className='col-1'>
+						<button  className='btn m-1 me-md-2 btn-outline-danger' type='submit'>Add</button>
+					</div>
+				</div>
 			</form>
 		</>
 	)
@@ -308,20 +332,35 @@ const UpdateForm = (props) => {
 
 	return (
 	<>
-		<div>`Edit equipment: {props.item.equipment}` </div>
-		<form action="" className='form'>
-			<label htmlFor="equipment">Ingredient:</label>
-			<input onChange={(e) => setCurrentItem ({...currentItem, equipment:e.target.value}) }
-							type="text" name='equipment'  value = {currentItem.equipment}/>
-			<label htmlFor="quantity">Unit:</label>
-			<input onChange={(e) => setCurrentItem ({...currentItem, quantity:e.target.value}) }
-							name='quantity' value = {currentItem.quantity} />
-			<button onClick={(e) => {
-				e.preventDefault();
-				props.updateEquipment(currentItem);} }>Update</button> 
-			<button onClick={(e) => {
-				e.preventDefault();
-				props.cancelUpdate ();}}>Cancel</button> 
+		<div  className='row'>
+			<div  className='font-comfortaa'>Edit equipment: {props.item.equipment}</div>
+		</div>
+		<form action="" className='form font-comfortaa'>
+			<div className='row'>
+				<div className='col-7'>
+					<input className='form-control' onChange={(e) => setCurrentItem ({...currentItem, equipment:e.target.value}) }
+									type="text" name='equipment'  value = {currentItem.equipment}/>
+				</div>
+				<div className='col-3'>
+					<input  className='form-control' onChange={(e) => setCurrentItem ({...currentItem, quantity:e.target.value}) }
+									name='quantity' value = {currentItem.quantity} />
+				</div>
+
+				<div className='col-1'>
+					<i className="bi bi-save2" style={{'font-size': '1.3rem', color: "#BD302D"}}
+						onClick={(e) => {
+							e.preventDefault();
+							props.updateEquipment(currentItem);} }></i>
+				</div>
+
+				<div className='col-1'>
+					<i className="bi bi-x-square" style={{'font-size': '1.3rem', color: "#BD302D"}}
+						onClick={(e) => {
+							e.preventDefault();
+							props.cancelUpdate ();}}></i>
+				</div>
+
+			</div>
 		</form>
 	</>
 	)

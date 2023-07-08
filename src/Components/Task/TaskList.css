@@ -1,0 +1,16 @@
+.scroll_div {
+	overflow: auto;
+	height: 300px;
+	/* border: 1px solid black; */
+}
+
+.form-box {
+	/* border: 1px solid black; */
+} 
+
+.form-control, .form-select {
+  border: none!important;
+  border-bottom: 1px solid #ccc!important;
+  border-radius: 0!important;
+	border-color: #000000!important;
+}

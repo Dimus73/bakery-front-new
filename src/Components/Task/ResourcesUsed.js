@@ -56,17 +56,15 @@ const ResourcesUsed = (props) => {
 
 
 	return (
-		<div className="container">
+		<div className="container pt-3">
 			<div className="row">
-				<h1>ResourcesUsed</h1>
-
-				<table>
+				<table className="table">
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Ingredients</th>
-							<th>quantity</th>
-							<th>unit</th>
+							<th className='col-1 text-center'>n</th>
+							<th className='col-7 text-start'>ingredients</th>
+							<th className='col-2 text-center'>quantity</th>
+							<th className='col-2 text-center'>unit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -74,13 +72,13 @@ const ResourcesUsed = (props) => {
 					</tbody>
 				</table>
 
-				<table>
+				<table className="table mt-3">
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Equipment</th>
-							<th>quantity</th>
-							<th>unit</th>
+							<th className='col-1 text-center'>n</th>
+							<th className='col-7 text-start'>Equipment</th>
+							<th className='col-2 text-center'>quantity</th>
+							<th className='col-2 text-center'>unit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -96,10 +94,10 @@ const ResourcesUsed = (props) => {
 const TableRows = (props) => {
 	return(
 		<tr key={props.i}>
-			<td>{props.i+1}</td>
-			<td>{ props.item.resource }</td>
-			<td>{ props.item.quantity }</td>
-			<td>{ props.item.unit_name }</td>
+			<td className='col-1 text-center'>{props.i+1}</td>
+			<td className='col-1 text-start'>{ props.item.resource }</td>
+			<td className='col-1 text-center'>{ props.item.quantity }</td>
+			<td className='col-1 text-center'>{ props.item.unit_name }</td>
 		</tr>
 	)
 }

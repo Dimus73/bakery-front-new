@@ -28,7 +28,7 @@ function App() {
     {/* <Ingredients /> */}
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route index                        element={<HomePage />} />
+        <Route index                        element={<RecipeList />} />
         <Route path='login'                 element={<Login />} />
         <Route path='registry'              element={<Registry />} />
 

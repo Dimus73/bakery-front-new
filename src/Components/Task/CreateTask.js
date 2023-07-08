@@ -3,6 +3,7 @@ import { useSelector  } from 'react-redux'
 import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
 import  ResourcesUsed  from './ResourcesUsed';
+import './CreateTask.css';
 
 
 const emptyTask = {
@@ -274,29 +275,37 @@ const CreateTask = () => {
 
 	return (
 		<div className="container">
-			{editMode === EDIT_MODE.CREATE ? <h1>CREATE daily task</h1>
-			:
-			editMode === EDIT_MODE.EDIT ? <h1>EDIT daily task</h1> 
-			:
-			<h1>VIEW daily task</h1> 
-			}
-			<label htmlFor="taskDate">Choice the day</label>
-			<input type="date" name='taskDate' value={task.date} 
-				onChange={(e)=> setTask({...task, date:e.target.value})}/>
 			<div className='row'>
-				<div className='col-6'>
-					<div className='container'>
-						<div className='row'>
+				{editMode === EDIT_MODE.CREATE ? <h6>CREATE daily task</h6>
+				:
+				editMode === EDIT_MODE.EDIT ? <h6>EDIT daily task</h6>
+				:
+				<h1>VIEW daily task</h1>
+				}
+			</div>
+			<div className='row'>
+				<div className='col-12 col-lg-6  font-comfortaa'>
+					<div className='container  bg-white p-5 pb-3 pt-3 shadow-lg'>
+						<div className='row text-start mt-3'>
+							<div className='col'>
+								<label class="form-label" htmlFor="taskDate">Choice the day</label>
+							</div>
+							<div  className='col'>
+								<input className='datepicker form-control' type="date" name='taskDate' value={task.date}
+									onChange={(e)=> setTask({...task, date:e.target.value})}/>
+							</div>
+						</div>
+						<div className='scroll_div pt-3 overflow-on'>
 							<div>
 								<table className='table table-hover'>
 									<thead>
 										<tr>
-											<th className='col-1'>No</th>
-											<th className='col-4'>Recipe</th>
-											<th className='col-2'>Quantity in recipe</th>
-											<th className='col-1'>Unit</th>
-											<th className='col-2 text-end'>Task numbers</th>
-											<th className='col-2'>Total</th>
+											<th className='col-1 text-center'>No</th>
+											<th className='col-4'>recipe</th>
+											<th className='col-2 text-center'>quan.</th>
+											<th className='col-1 text-center'>unit</th>
+											<th className='col-2 text-end'>repeat</th>
+											<th className='col-2 text-end'>total</th>
 											<th className='col-2'></th>
 										</tr>
 									</thead>
@@ -306,20 +315,25 @@ const CreateTask = () => {
 								</table>
 							</div>
 						</div>
+						<div className='text-end'>
+							{editMode === EDIT_MODE.CREATE ? <button className='btn btn-outline-danger m-3' onClick={ () => saveNewTask (EDIT_MODE.CREATE) } >Save</button>
+							:
+							editMode === EDIT_MODE.EDIT ? <button className='btn btn-outline-danger m-3' onClick={ () => saveNewTask (EDIT_MODE.EDIT) } >Update</button>
+							:
+							<h4>Task is in work. View mode</h4>
+							}
+							<button className='btn btn-outline-danger m-3' onClick={ () => navigate(`/task/list`) } >Close</button>
+						</div>
+						
 					</div>
 				</div>
-				<div className='col-6'>
-					{ !(editMode === EDIT_MODE.CREATE) ? <ResourcesUsed id={task.id}/> : '' }
+				<div className='col-12 col-lg-6 font-comfortaa'>
+					<div className='container  bg-white p-5 pb-3pt-3 shadow-lg'>
+						<h6>Resources</h6>
+						{ !(editMode === EDIT_MODE.CREATE) ? <ResourcesUsed id={task.id}/> : '' }
+					</div>
 				</div>
 			</div>
-			
-			{editMode === EDIT_MODE.CREATE ? <button className='btn btn-primary m-3' onClick={ () => saveNewTask (EDIT_MODE.CREATE) } >Save</button>
-			:
-			editMode === EDIT_MODE.EDIT ? <button className='btn btn-primary m-3' onClick={ () => saveNewTask (EDIT_MODE.EDIT) } >Update</button> 
-			:
-			<h4>Task is in work. View mode</h4> 
-			}
-			<button className='btn btn-primary m-3' onClick={ () => navigate(`/task/list`) } >Close</button>
 		</div>
 	)
 }
@@ -336,16 +350,16 @@ const TaskRow = (props) => {
 								<option key={i} value={value.id} >{value.name}</option>)}
 				</select>
 			</td>
-			<td className="col-2" >
+			<td className="col-2 text-center" >
 				{props.item.quantityInRecipe}
 			</td>
-			<td className="col-1" >
+			<td className="col-1 text-center" >
 				{props.item.unit_name}
 			</td>
 			<td className='col-2'>
 				<input  className='text-end w-100' type="text" name="quantity" value={props.item.quantity} onChange={(e) => props.changeQuantity (e, props.i)} /> 
 			</td>
-			<td className="col-2" >
+			<td className="col-2 text-center" >
 				{props.item.totalQuantity}
 			</td>
 			<td className='align-middle text-center ' >
