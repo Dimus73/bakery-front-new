@@ -92,7 +92,7 @@ const TopBar = () =>{
 
 
 
-						<li><Link to="/registry" className="nav-link px-2">New Use</Link></li>
+						<li><Link to="/registry" className="nav-link px-2">New User</Link></li>
 
           </ul>
         </div>

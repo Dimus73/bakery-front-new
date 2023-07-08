@@ -101,15 +101,16 @@ const Document = (props) => {
 				documentId   : 0,
 				ingredientId : curIngredient[0].id,
 				cost         : (document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0,
-				quantity     : (document.type === DOCUMENT_TYPE.SPAN) ? value.quantity : value.quantity - value.quantity_on_stock ,
+				quantity     : (document.type === DOCUMENT_TYPE.SPAN) ? value.quantity : (value.quantity - value.quantity_on_stock) ,
 				stock        : curIngredient[0].qountity,
 				stockCost    : curIngredient[0].costt,
 				unit_name    : curIngredient[0].unit_short_name,
-				totalCost    : value.quantity* (document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0,	
+				totalCost    : value.quantity* ((document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0),	
 
 				// totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity
 			})
 		})
+		console.log('TempList =>',tempList);
 		return tempList;
 	} 
 
@@ -277,7 +278,7 @@ const Document = (props) => {
 		const currentIngredient = ingredientsList.filter ((value => value.id === Number(currentId)))
 
 		documentList[i].ingredientId = currentId;
-		documentList[i].unit_name = currentIngredient[0].unit_name; 	
+		documentList[i].unit_name = currentIngredient[0].unit_short_name; 	
 		documentList[i].stock = currentIngredient[0].qountity; 	
 		documentList[i].stockCost = currentIngredient[0].costt.toFixed(2); 	
 		if ( document.type === DOCUMENT_TYPE.SPAN) {
