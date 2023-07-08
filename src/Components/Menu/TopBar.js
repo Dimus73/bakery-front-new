@@ -92,9 +92,10 @@ const TopBar = () =>{
 									Warehouse
 								</Link>
 								<ul className="dropdown-menu">
-									<li><Link className="dropdown-item" to="/warehouse" >List</Link></li>
+									<li><Link className="dropdown-item" to="/warehouse" >Document list</Link></li>
 									<li><Link className="dropdown-item" to="/warehouse/purchase" >Purchase</Link></li>
 									<li><Link className="dropdown-item" to="/warehouse/span" >Span</Link></li>
+									<li><Link className="dropdown-item" to="/warehouse/stock" >Stock balance</Link></li>
 								</ul>
 						</li>
 

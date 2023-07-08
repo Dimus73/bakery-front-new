@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSelector  } from 'react-redux'
+import { useDispatch, useSelector  } from 'react-redux'
+import { setIngredientsListToMove } from '../../redux/action';
 import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
 import { EDIT_MODE, DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
@@ -37,7 +38,9 @@ const Document = (props) => {
 	const [editMode, setEditMode] = useState (EDIT_MODE.CREATE)
 	// const docType = props.docType;
 
-	const user = useSelector ( (state) =>(state.user) )
+	const user = useSelector ( (state) =>(state.user) );
+	const incomingList = useSelector ( state => state.ingredientsForMove);
+
 	
 	const [document, setDocument] = useState({...blankDocument});
 
@@ -46,6 +49,7 @@ const Document = (props) => {
 	// console.log('PARAMS =>', params);
 	// console.log('PROPS =>', props);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 
 // ---------------------------
@@ -71,6 +75,7 @@ const Document = (props) => {
 			console.log('Ingredients list:', data, dataJS);
 			if (data.ok) {
 				setIngredientsList (dataJS);
+				return dataJS;
 			} else {
 				alert(`Error getting list of ingredients. Status: ${data.status}. Message: ${dataJS.msg}`)
 			}
@@ -80,15 +85,44 @@ const Document = (props) => {
 		}
 	}
 
+
+// ---------------------------
+// Function to convert incoming list to list of ingredients to pushes 
+// ---------------------------
+
+	const convertIncoming = (inList, ingredients) => {
+		// console.log('In convertIncoming',inList, ingredients);
+		const tempList = inList.map ((value) => {
+			const curIngredient = ingredients.filter ((item) => value.ingredient_id === item.id) 
+			// console.log('In Filter=>', value, curIngredient[0]);
+			return ({
+				id           : 0,
+				documentId   : 0,
+				ingredientId : curIngredient[0].id,
+				cost         : 0,
+				quantity     : value.quantity,
+				stock        : curIngredient[0].quantity,
+				stockCost    : curIngredient[0].costt,
+				unit_name    : curIngredient[0].unit_short_name,
+				totalCost    : 0					
+			})
+		})
+		return tempList;
+	} 
+
 	useEffect (() =>{
 		const tt = async () => {
-			await getIngredientsList ();
+			const tempIngredients = await getIngredientsList ();
 			if ('id' in params){
 				await getDocument (params.id)
 			}
+			// console.log('ingredientsForMove =>', incomingList);
+			if ( incomingList.length > 0 ) {
+				setDocumentList ( convertIncoming (incomingList, tempIngredients) );
+				dispatch (setIngredientsListToMove([]));
+			}
 		}
 		tt ();
-
 	},[])
 
 	// ---------------------------
@@ -182,9 +216,7 @@ const Document = (props) => {
 				console.log(error);
 				alert (`Error getting list of recipes. Message: ${error}`)		
 			}
-	
 		}
-
 	}
 
 	// ---------------------------
@@ -295,7 +327,6 @@ const Document = (props) => {
 	return (
 		<div className="container">
 			<h1>Document</h1>
-			<p>{JSON.stringify(documentList)}</p>
 			{editMode === EDIT_MODE.CREATE ? <h3>Mode: CREATE</h3>
 			:
 			editMode === EDIT_MODE.EDIT ? <h3>Mode: EDIT</h3> 

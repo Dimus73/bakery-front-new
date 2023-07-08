@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { UseSelector, useSelector } from "react-redux";
+import {useDispatch , useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setIngredientsListToMove } from "../../redux/action";
+
 
 const ResourcesUsed = (props) => {
 	const [resource, setResource] = useState(
@@ -9,6 +12,9 @@ const ResourcesUsed = (props) => {
 		}
 		);
 	const user = useSelector ((state) => state.user);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	// console.log('Resource props.id=>', props.id);
 	const id = props.id;
 	// const id=93;
@@ -55,36 +61,61 @@ const ResourcesUsed = (props) => {
 	},[props.id])
 
 
+	// **************** Call Pushes List
+	const callPushesList = () => {
+		dispatch (setIngredientsListToMove(resource.ingredients));
+		// console.log('Weth send to dispatch=>',resource.ingredients );
+		navigate ('/warehouse/purchase');
+	}
+
+	const callSpanList = () => {
+		dispatch (setIngredientsListToMove(resource.ingredients));
+		// console.log('Weth send to dispatch=>',resource.ingredients );
+		navigate ('/warehouse/span');
+	}
+
 	return (
 		<div className="container pt-3">
 			<div className="row">
-				<table className="table">
-					<thead>
-						<tr>
-							<th className='col-1 text-center'>n</th>
-							<th className='col-7 text-start'>ingredients</th>
-							<th className='col-2 text-center'>quantity</th>
-							<th className='col-2 text-center'>unit</th>
-						</tr>
-					</thead>
-					<tbody>
-						{resource.ingredients.map ((item, i) => <TableRows item={item} i={i}/> )}
-					</tbody>
-				</table>
+				<div className="row">
+					<table className="table">
+						<thead>
+							<tr>
+								<th className='col-1 text-center'>n</th>
+								<th className='col-7 text-start'>ingredients</th>
+								<th className='col-2 text-center'>quantity</th>
+								<th className='col-2 text-center'>unit</th>
+							</tr>
+						</thead>
+						<tbody>
+							{resource.ingredients.map ((item, i) => <TableRows item={item} i={i}/> )}
+						</tbody>
+					</table>
+				</div>
+				<div className="row ">
+				<div className="col text-start">
+						<button className="btn btn-outline-danger" onClick={ callSpanList }>To production</button>
+					</div>
+					<div className="col text-end">
+						<button className="btn btn-outline-danger" onClick={ callPushesList }>Purchase</button>
+					</div>
+				</div>
 
-				<table className="table mt-3">
-					<thead>
-						<tr>
-							<th className='col-1 text-center'>n</th>
-							<th className='col-7 text-start'>Equipment</th>
-							<th className='col-2 text-center'>quantity</th>
-							<th className='col-2 text-center'>unit</th>
-						</tr>
-					</thead>
-					<tbody>
-						{resource.equipments.map ((item, i) => <TableRows item={item} i={i}/> )}
-					</tbody>
-				</table>
+				<div className="row"> 
+					<table className="table mt-3">
+						<thead>
+							<tr>
+								<th className='col-1 text-center'>n</th>
+								<th className='col-7 text-start'>Equipment</th>
+								<th className='col-2 text-center'>quantity</th>
+								<th className='col-2 text-center'>unit</th>
+							</tr>
+						</thead>
+						<tbody>
+							{resource.equipments.map ((item, i) => <TableRows item={item} i={i}/> )}
+						</tbody>
+					</table>
+				</div>
 
 			</div>
 		</div>

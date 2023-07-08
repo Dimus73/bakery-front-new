@@ -123,7 +123,7 @@ const RecipeDetailView = (props) => {
 							</table>
 						</div>
 					</div>
-					<div className='d-grid gap-2 d-md-flex justify-content-md-end'>
+					<div className='d-grid gap-2 d-md-flex justify-content-md-end pb-4'>
 						<button type="button" class="btn btn-danger mt-4 btn-lg" onClick={() =>goBack(1)}>Close</button>
 					</div>
 				</div>
