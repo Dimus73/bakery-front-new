@@ -343,19 +343,19 @@ const Document = (props) => {
 					<div className='col-12 col-lg-8 mt-3 p-3'>
 						<div  className='row'>
 							<div className='col'>
-								{document.type === DOCUMENT_TYPE.PURCHASE ? <label>Document type: Purchase</label>
+								{document.type === DOCUMENT_TYPE.PURCHASE ? <label>Type: Purchase</label>
 								:
 								<label>Document type: Span</label> }
 							</div>
 							
 							<div className='col'>
-								{document.status === DOCUMENT_STATUS.DRAFT ? <label>Document status: Draft</label>
+								{document.status === DOCUMENT_STATUS.DRAFT ? <label>Status: Draft</label>
 								:
 								<label>Document status: Completed</label> }
 							</div>
 							
 							<div className='col'>
-								<label htmlFor="taskDate">Choice the day</label>
+								<label htmlFor="taskDate">Date</label>
 								<input type="date" name='taskDate' value={document.date}
 									onChange={(e)=> setDocument({...document, date:e.target.value})}/>
 							</div>
@@ -372,12 +372,12 @@ const Document = (props) => {
 										(<>
 											<thead className='font-comfortaa'>
 												<tr>
-													<th className='col-1'>No</th>
+													<th className='col-1'>n</th>
 													<th className='col-4'>ingredient</th>
-													<th className='col-1'>Unit</th>
-													<th className='col-2 text-end'>Cost per one</th>
-													<th className='col-2 text-end'>Quantity</th>
-													<th className='col-2 text-end'>Total</th>
+													<th className='col-1'>unit</th>
+													<th className='col-2 text-end'>cost per one</th>
+													<th className='col-2 text-end'>quantity</th>
+													<th className='col-2 text-end'>total</th>
 												</tr>
 											</thead>
 											<tbody className='font-roboto'>
@@ -392,13 +392,13 @@ const Document = (props) => {
 										(<>
 											<thead className='font-comfortaa'>
 												<tr>
-													<th className='col-1'>No</th>
+													<th className='col-1'>n</th>
 													<th className='col-4'>ingredient</th>
-													<th className='col-1'>Unit</th>
-													<th className='col-1 text-end'>Cost</th>
-													<th className='col-1 text-end'>Stock</th>
-													<th className='col-1 text-end'>Quantity</th>
-													<th className='col-1 text-end'>Total</th>
+													<th className='col-1'>unit</th>
+													<th className='col-1 text-end'>cost</th>
+													<th className='col-1 text-end'>stock</th>
+													<th className='col-1 text-end'>quantity</th>
+													<th className='col-1 text-end'>total</th>
 												</tr>
 											</thead>
 											<tbody className='font-roboto'>

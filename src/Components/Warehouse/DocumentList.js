@@ -75,7 +75,7 @@ const DocumentList = () => {
 							<div className='row'>
 								<div className=' col'>
 									<div className='row'>
-										<label className='col-lg-4 col-form-label' htmlFor="type">Show type:</label>
+										<label className='col-lg-4 col-form-label' htmlFor="type">Type:</label>
 										<div className='col-lg-8 '>
 											<select className='form-select' name="type" id="" defaultValue={showType} onChange={(e)=>setShowType(e.target.value)}>
 												<option value="All">All</option>
@@ -87,7 +87,7 @@ const DocumentList = () => {
 								</div>
 								<div className='col'>
 									<div className='row'>
-										<label className='col-lg-4 col-form-label' htmlFor="type">Show status:</label>
+										<label className='col-lg-4 col-form-label' htmlFor="type">Status:</label>
 										<div className='col-lg-8'>
 											<select className='form-select' name="status" id="" defaultValue={showStatus} onChange={(e)=>setShowStatus(e.target.value)}>
 												<option value="All">All</option>
@@ -107,8 +107,8 @@ const DocumentList = () => {
 							<table className="table">
 								<thead className='font-comfortaa'>
 									<tr>
-									<th className=''>#</th>
-									<th className=''>DATE</th>
+									<th className=''>n</th>
+									<th className=''>date</th>
 									<th className='text-center'>type</th>
 									<th className='text-center'>status</th>
 									<th className='text-center'></th>

@@ -288,7 +288,7 @@ const CreateTask = () => {
 					<div className='container  bg-white p-5 pb-3 pt-3 shadow-lg'>
 						<div className='row text-start mt-3'>
 							<div className='col'>
-								<label class="form-label" htmlFor="taskDate">Choice the day</label>
+								<label class="form-label" htmlFor="taskDate">Date</label>
 							</div>
 							<div  className='col'>
 								<input className='datepicker form-control' type="date" name='taskDate' value={task.date}

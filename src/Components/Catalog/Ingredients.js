@@ -304,13 +304,13 @@ const AddForm = (props) => {
 	return (
 		<>
 			<div className='row'>
-				<div className='font-comfortaa'>new</div>
+				<div className='font-comfortaa'>New</div>
 			</div>
 			<form className='font-comfortaa' onSubmit={props.addIngredients} action="">
 				<div className='row justify-content-md-center'>
 					<div className='col-7'>
 						<input className='form-control' onChange={(e) => setCurrentItem ({...currentItem, name:e.target.value}) }
-									type="text" name='iName'  value = {currentItem.name} placeholder="enter ingredient"/>
+									type="text" name='iName'  value = {currentItem.name} placeholder="Enter ingredient"/>
 					</div>
 					<div className='col-3'>
 						<select className='form-select' onChange={(e) => setCurrentItem ({...currentItem, unit_id:e.target.value}) }
