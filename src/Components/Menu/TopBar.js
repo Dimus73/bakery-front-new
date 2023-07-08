@@ -42,9 +42,6 @@ const TopBar = () =>{
 
         <div className="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="#">Centered nav only</Link>
-            </li>
 
 
             <li className="nav-item dropdown">
@@ -55,10 +52,6 @@ const TopBar = () =>{
 									<li><Link className="dropdown-item" to="/task/list" >List</Link></li>
 									<li><Link className="dropdown-item" to="/task/create" >Create</Link></li>
 								</ul>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link disabled">Disabled</Link>
             </li>
 
 
@@ -80,9 +73,7 @@ const TopBar = () =>{
 								<ul className="dropdown-menu">
 								<li><Link className="dropdown-item" to="/catalog/ingredients">Ingredient</Link></li>
 								<li><Link className="dropdown-item" to="/catalog/equipment">Equipment</Link></li>
-									<li><Link className="dropdown-item" to="#">Another action</Link></li>
 									<li><hr className="dropdown-divider" /></li>
-									<li><Link className="dropdown-item" to="#">Something else here</Link></li>
 								</ul>
 						</li>
 
@@ -101,7 +92,7 @@ const TopBar = () =>{
 
 
 
-						<li><Link to="/registry" className="nav-link px-2">Registry</Link></li>
+						<li><Link to="/registry" className="nav-link px-2">New Use</Link></li>
 
           </ul>
         </div>

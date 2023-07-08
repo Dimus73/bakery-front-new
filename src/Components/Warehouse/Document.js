@@ -4,6 +4,7 @@ import { setIngredientsListToMove } from '../../redux/action';
 import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
 import { EDIT_MODE, DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
+import './Document.css'
 
 
 
@@ -91,7 +92,7 @@ const Document = (props) => {
 // ---------------------------
 
 	const convertIncoming = (inList, ingredients) => {
-		// console.log('In convertIncoming',inList, ingredients);
+		console.log('In convertIncoming',inList, ingredients);
 		const tempList = inList.map ((value) => {
 			const curIngredient = ingredients.filter ((item) => value.ingredient_id === item.id) 
 			// console.log('In Filter=>', value, curIngredient[0]);
@@ -99,12 +100,14 @@ const Document = (props) => {
 				id           : 0,
 				documentId   : 0,
 				ingredientId : curIngredient[0].id,
-				cost         : 0,
-				quantity     : value.quantity,
-				stock        : curIngredient[0].quantity,
+				cost         : (document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0,
+				quantity     : (document.type === DOCUMENT_TYPE.SPAN) ? value.quantity : value.quantity - value.quantity_on_stock ,
+				stock        : curIngredient[0].qountity,
 				stockCost    : curIngredient[0].costt,
 				unit_name    : curIngredient[0].unit_short_name,
-				totalCost    : 0					
+				totalCost    : value.quantity* (document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0,	
+
+				// totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity
 			})
 		})
 		return tempList;
@@ -239,17 +242,19 @@ const Document = (props) => {
 	// ---------------------------
 	const documentDetailCheck = (documentDetail) => {
 
+		console.log('In check DATA', documentDetail);
+
 		if ( documentDetail.length === 0 ) {
 			alert ('The document must contain at least one record')
 			return false;
 		}
 		if ( document.type === DOCUMENT_TYPE.SPAN) {
-			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <=0 )){
+			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) ===0 )){
 				alert ('In the quantity and cost fields must be a number greater than zero')
 				return false;
 			}
 		} else {
-			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <=0 )){
+			if (documentDetail.some((value) =>  isNaN(value.quantity) || Number(value.quantity) <=0 || isNaN(value.cost) || Number(value.cost) <= 0 )){
 				alert ('In the quantity and cost fields must be a number greater than zero')
 				return false;
 			}
@@ -325,92 +330,113 @@ const Document = (props) => {
 	console.log('Before return Document LIST=>', documentList);
 
 	return (
-		<div className="container">
-			<h1>Document</h1>
-			{editMode === EDIT_MODE.CREATE ? <h3>Mode: CREATE</h3>
-			:
-			editMode === EDIT_MODE.EDIT ? <h3>Mode: EDIT</h3> 
-			:
-			<h1>VIEW daily task</h1> 
-			}
+		<div className='container'>
+				{editMode === EDIT_MODE.CREATE ? <h6>Document Mode: CREATE</h6>
+				:
+				editMode === EDIT_MODE.EDIT ? <h6>Document Mode: EDIT</h6>
+				:
+				<h6>Document VIEW daily task</h6>
+				}
+			<div className="container  bg-white shadow-lg">
 
-			{document.type === DOCUMENT_TYPE.PURCHASE ? <h3>Document type: Purchase</h3> 
-			:
-			<h3>Document type: Span</h3> }
-
-			{document.status === DOCUMENT_STATUS.DRAFT ? <h3>Document status: Draft</h3> 
-			:
-			<h3>Document status: Completed</h3> }
-
-			<label htmlFor="taskDate">Choice the day</label>
-			<input type="date" name='taskDate' value={document.date} 
-				onChange={(e)=> setDocument({...document, date:e.target.value})}/>
-			<div className='row'>
-				<div className='col-10'>
-					<div className='container'>
-						<div className='row'>
-							<div>
-								<table className='table table-hover'>
-
-									{document.type === DOCUMENT_TYPE.PURCHASE ? 
-									(<>
-										<thead>
-											<tr>
-												<th className='col-1'>No</th>
-												<th className='col-4'>ingredient</th>
-												<th className='col-1'>Unit</th>
-												<th className='col-2 text-end'>Cost per one</th>
-												<th className='col-2 text-end'>Quantity</th>
-												<th className='col-2 text-end'>Total</th>
-											</tr>
-										</thead>
-										<tbody>
-												{documentList.map ((value,i) => <DocumentRowPurchase item={value}
-												ingredientsList = {ingredientsList} i={i}
-												choseIngredient = {choseIngredient}
-												changeQuantity  = {changeQuantity}
-												changeCost      = {changeCost}/>) }
-										</tbody>
-									</>)
-									:
-									(<>
-										<thead>
-											<tr>
-												<th className='col-1'>No</th>
-												<th className='col-4'>ingredient</th>
-												<th className='col-1'>Unit</th>
-												<th className='col-1 text-end'>Cost</th>
-												<th className='col-1 text-end'>Stock</th>
-												<th className='col-1 text-end'>Quantity</th>
-												<th className='col-1 text-end'>Total</th>
-											</tr>
-										</thead>
-										<tbody>
-												{documentList.map ((value,i) => <DocumentRowSpan item={value}
-												ingredientsList = {ingredientsList} i={i}
-												choseIngredient = {choseIngredient}
-												changeQuantity  = {changeQuantity}
-												changeCost      = {changeCost}/>) }
-										</tbody>
-									</>)
-                }
-
-
-								</table>
+				<div className="row justify-content-md-center font-comfortaa">
+					<div className='col-12 col-lg-8 mt-3 p-3'>
+						<div  className='row'>
+							<div className='col'>
+								{document.type === DOCUMENT_TYPE.PURCHASE ? <label>Document type: Purchase</label>
+								:
+								<label>Document type: Span</label> }
+							</div>
+							
+							<div className='col'>
+								{document.status === DOCUMENT_STATUS.DRAFT ? <label>Document status: Draft</label>
+								:
+								<label>Document status: Completed</label> }
+							</div>
+							
+							<div className='col'>
+								<label htmlFor="taskDate">Choice the day</label>
+								<input type="date" name='taskDate' value={document.date}
+									onChange={(e)=> setDocument({...document, date:e.target.value})}/>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+				
+				
+				<div className='row justify-content-md-center'>
+					<div className='col-12 col-lg-8 mt-3 p-3'>
+						<div className='p-3'>
+									<table className='table table-hover'>
+										{document.type === DOCUMENT_TYPE.PURCHASE ?
+										(<>
+											<thead className='font-comfortaa'>
+												<tr>
+													<th className='col-1'>No</th>
+													<th className='col-4'>ingredient</th>
+													<th className='col-1'>Unit</th>
+													<th className='col-2 text-end'>Cost per one</th>
+													<th className='col-2 text-end'>Quantity</th>
+													<th className='col-2 text-end'>Total</th>
+												</tr>
+											</thead>
+											<tbody className='font-roboto'>
+													{documentList.map ((value,i) => <DocumentRowPurchase item={value}
+													ingredientsList = {ingredientsList} i={i}
+													choseIngredient = {choseIngredient}
+													changeQuantity  = {changeQuantity}
+													changeCost      = {changeCost}/>) }
+											</tbody>
+										</>)
+										:
+										(<>
+											<thead className='font-comfortaa'>
+												<tr>
+													<th className='col-1'>No</th>
+													<th className='col-4'>ingredient</th>
+													<th className='col-1'>Unit</th>
+													<th className='col-1 text-end'>Cost</th>
+													<th className='col-1 text-end'>Stock</th>
+													<th className='col-1 text-end'>Quantity</th>
+													<th className='col-1 text-end'>Total</th>
+												</tr>
+											</thead>
+											<tbody className='font-roboto'>
+													{documentList.map ((value,i) => <DocumentRowSpan item={value}
+													ingredientsList = {ingredientsList} i={i}
+													choseIngredient = {choseIngredient}
+													changeQuantity  = {changeQuantity}
+													changeCost      = {changeCost}/>) }
+											</tbody>
+										</>)
+											}
+									</table>
+						</div>
+					</div>
+				</div>
 			
-			{editMode === EDIT_MODE.CREATE ? <button className='btn btn-primary m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.DRAFT) } >Save</button>
-			:
-			editMode === EDIT_MODE.EDIT ? <button className='btn btn-primary m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.DRAFT) } >Update</button> 
-			:
-			<h4>Task is in work. View mode</h4> 
-			}
-			<button className='btn btn-primary m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.COMPLETED) } >Save & Completed</button>
-			<button className='btn btn-primary m-3' onClick={ () => navigate(-1) } >Close</button> 
+				<div className="row justify-content-md-center">
+					<div className='col-12 col-lg-8 mt-3 p-3'>
+						<div className='row'>
+							<div className='col text-end'>
+								{editMode === EDIT_MODE.CREATE ? <button className='btn  btn-outline-danger m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.DRAFT) } >Save</button>
+								:
+								editMode === EDIT_MODE.EDIT ? <button className='btn  btn-outline-danger m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.DRAFT) } >Update</button>
+								:
+								<h4>Task is in work. View mode</h4>
+								}
+							</div>
+							<div className='col-4 text-start'>
+								<button className='btn  btn-outline-danger m-3' onClick={ () => saveNewDocument (editMode, DOCUMENT_STATUS.COMPLETED) } >Save & Completed</button>
+							</div>
+							<div className='col-2 text-end'>
+								<button className='btn btn-outline-danger m-3' onClick={ () => navigate(-1) } >Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	)
 }

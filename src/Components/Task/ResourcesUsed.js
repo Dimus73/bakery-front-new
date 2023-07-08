@@ -34,7 +34,7 @@ const ResourcesUsed = (props) => {
 		try {
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
-			// console.log(data, dataJS);
+			console.log('Resource from DB=>', data, dataJS);
 			if (data.ok) {
 				setResource (dataJS);
 			} else {
@@ -83,17 +83,18 @@ const ResourcesUsed = (props) => {
 							<tr>
 								<th className='col-1 text-center'>n</th>
 								<th className='col-7 text-start'>ingredients</th>
+								<th className='col-2 text-center'>stock</th>
 								<th className='col-2 text-center'>quantity</th>
 								<th className='col-2 text-center'>unit</th>
 							</tr>
 						</thead>
 						<tbody>
-							{resource.ingredients.map ((item, i) => <TableRows item={item} i={i}/> )}
+							{resource.ingredients.map ((item, i) => <TableRows item={item} i={i} resource={'I'}/> )}
 						</tbody>
 					</table>
 				</div>
 				<div className="row ">
-				<div className="col text-start">
+				  <div className="col text-start">
 						<button className="btn btn-outline-danger" onClick={ callSpanList }>To production</button>
 					</div>
 					<div className="col text-end">
@@ -112,7 +113,7 @@ const ResourcesUsed = (props) => {
 							</tr>
 						</thead>
 						<tbody>
-							{resource.equipments.map ((item, i) => <TableRows item={item} i={i}/> )}
+							{resource.equipments.map ((item, i) => <TableRows item={item} i={i}  resource={'E'}/> )}
 						</tbody>
 					</table>
 				</div>
@@ -127,6 +128,7 @@ const TableRows = (props) => {
 		<tr key={props.i}>
 			<td className='col-1 text-center'>{props.i+1}</td>
 			<td className='col-1 text-start'>{ props.item.resource }</td>
+			{props.resource === 'I' ? <td className='col-1 text-center'>{ props.item.quantity_on_stock }</td> : ''}
 			<td className='col-1 text-center'>{ props.item.quantity }</td>
 			<td className='col-1 text-center'>{ props.item.unit_name }</td>
 		</tr>

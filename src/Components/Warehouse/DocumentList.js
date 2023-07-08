@@ -7,6 +7,7 @@ import { DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
 
 const DocumentList = () => {
 	const user = useSelector (state => state.user);
+	const navigate = useNavigate ();
 
 	const tDate = new Date();
 	const [ documentList, setDocumentList ] = useState ( [ { date:tDate.toISOString() } ] );
@@ -66,42 +67,72 @@ const DocumentList = () => {
 
 	return (
 		<div className='container'>
-			<div className='row'>
-				<div className='col'>
-					<h1>Warehouse documents</h1>
+			<h6>Warehouse documents</h6>
+			<div className="container  bg-white shadow-lg">
 
-					<label htmlFor="type">Show type:</label>
-					<select name="type" id="" defaultValue={showType} onChange={(e)=>setShowType(e.target.value)}>
-						<option value="All">All</option>
-						<option value={DOCUMENT_TYPE.PURCHASE}>{DOCUMENT_TYPE.PURCHASE}</option>
-						<option value={DOCUMENT_TYPE.SPAN}>{DOCUMENT_TYPE.SPAN}</option>
-					</select>
-
-					<label htmlFor="type">Show status:</label>
-					<select name="status" id="" defaultValue={showStatus} onChange={(e)=>setShowStatus(e.target.value)}>
-						<option value="All">All</option>
-						<option value={DOCUMENT_STATUS.COMPLETED}>{DOCUMENT_STATUS.COMPLETED}</option>
-						<option value={DOCUMENT_STATUS.DRAFT}>{DOCUMENT_STATUS.DRAFT}</option>
-					</select>
-
+				<div className="row justify-content-md-center">
+					<div className='col-12 col-lg-8 mt-3 p-3'>
+							<div className='row'>
+								<div className=' col'>
+									<div className='row'>
+										<label className='col-lg-4 col-form-label' htmlFor="type">Show type:</label>
+										<div className='col-lg-8 '>
+											<select className='form-select' name="type" id="" defaultValue={showType} onChange={(e)=>setShowType(e.target.value)}>
+												<option value="All">All</option>
+												<option value={DOCUMENT_TYPE.PURCHASE}>{DOCUMENT_TYPE.PURCHASE}</option>
+												<option value={DOCUMENT_TYPE.SPAN}>{DOCUMENT_TYPE.SPAN}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div className='col'>
+									<div className='row'>
+										<label className='col-lg-4 col-form-label' htmlFor="type">Show status:</label>
+										<div className='col-lg-8'>
+											<select className='form-select' name="status" id="" defaultValue={showStatus} onChange={(e)=>setShowStatus(e.target.value)}>
+												<option value="All">All</option>
+												<option value={DOCUMENT_STATUS.COMPLETED}>{DOCUMENT_STATUS.COMPLETED}</option>
+												<option value={DOCUMENT_STATUS.DRAFT}>{DOCUMENT_STATUS.DRAFT}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
-			</div>
-			<div className='row '>
-				<div className='col-8'>
-					<div className='row'>
-						<table>
-							<thead>
-								<tr>
-								<th className=''>#</th>
-								<th className=''>DATE</th>
+				
+				<div className='p-3'>
+					<div className="row justify-content-md-center">
+						<div className='scroll_div col-12 col-lg-8 mt-3 p-3'>
+							<table className="table">
+								<thead className='font-comfortaa'>
+									<tr>
+									<th className=''>#</th>
+									<th className=''>DATE</th>
 									<th className='text-center'>type</th>
 									<th className='text-center'>status</th>
-								</tr>
-							</thead>
-							<tbody>
-								{ showList.map ((value, i) => <DocumentLine item={value} i={i} /> )}
-							</tbody>
-						</table>
+									<th className='text-center'></th>
+									</tr>
+								</thead>
+								<tbody className='font-roboto'>
+									{ showList.map ((value, i) => <DocumentLine item={value} i={i} navigate={navigate}/> )}
+								</tbody>
+							</table>
+						</div>
+						<div className="row justify-content-md-center">
+							<div className='col-12 col-lg-8 mt-3 p-3'>
+								<div className="row ">
+									<div className="col text-start">
+										<button className="btn btn-outline-danger" onClick={ () => navigate ('/warehouse/span') } >To production</button>
+									</div>
+									<div className="col text-end">
+										<button className="btn btn-outline-danger" onClick={ () => navigate ('/warehouse/purchase') }>For purchase</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
 					</div>
 				</div>
 			</div>
@@ -116,7 +147,7 @@ const DocumentLine = (props) => {
 	return (
 		<tr key={props.i} >
 			<td className={'col-1 '}>{item.id}</td>
-			<td className={'col-4 '}>
+			<td className={'col-6 '}>
 			<Link to={'/warehouse/'+ item.id}>{item.date.split('T')[0]}</Link> 
 			</td>
 			<td className={'col-2 text-center '}>
@@ -126,7 +157,13 @@ const DocumentLine = (props) => {
 				{item.status}
 			</td>
 			<td>
-				<Link to={'/task/'+item.id} >Edit</Link>
+				<div className='col-1'>
+					<i className="bi bi-pencil" style={{'font-size': '1.3rem', color: "#BD302D"}}
+						onClick={(e) => {
+							e.preventDefault();
+							props.navigate ('/task/'+item.id);} }></i>
+				</div>
+
 			</td>
 		</tr>
 	)

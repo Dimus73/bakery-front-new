@@ -28,7 +28,7 @@ try {
 		}
 }
 
-initState.ingredientsForMove = [{}]
+initState.ingredientsForMove = []
 
 export const reducer = (state = initState, action = {}) => {
 	switch (action.type){

@@ -69,7 +69,7 @@ const RecipeCard = (props) => {
 					<h6 className="card-title font-comfortaa">{props.item.name}</h6>
 				</div>
 				<div className="col text-end me-3">
-					<button className="btn btn-lg text-light " style={{backgroundColor:"#BD302D"}}
+					<button className="btn btn-lg  btn-outline-danger" 
 						onClick={()=> props.navigate("/recipe/"+props.item.id)}>Edit</button>
 				</div>
 			</div>
