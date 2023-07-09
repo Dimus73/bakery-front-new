@@ -100,12 +100,12 @@ const Document = (props) => {
 				id           : 0,
 				documentId   : 0,
 				ingredientId : curIngredient[0].id,
-				cost         : (document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0,
-				quantity     : (document.type === DOCUMENT_TYPE.SPAN) ? value.quantity : (value.quantity - value.quantity_on_stock) ,
-				stock        : curIngredient[0].qountity,
-				stockCost    : curIngredient[0].costt,
+				cost         : ((document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0).toFixed(2),
+				quantity     : ((document.type === DOCUMENT_TYPE.SPAN) ? value.quantity : (value.quantity - value.quantity_on_stock)).toFixed(2) ,
+				stock        : curIngredient[0].qountity.toFixed(2),
+				stockCost    : (curIngredient[0].costt).toFixed(2),
 				unit_name    : curIngredient[0].unit_short_name,
-				totalCost    : value.quantity* ((document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0),	
+				totalCost    : (value.quantity* ((document.type === DOCUMENT_TYPE.SPAN) ? curIngredient[0].costt : 0)).toFixed(2),	
 
 				// totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity
 			})
@@ -320,7 +320,7 @@ const Document = (props) => {
 		const currentQuantity = e.target.value;
 		if ( !isNaN(currentQuantity) ){
 			documentList[i].cost = currentQuantity;
-			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ); 
+			documentList[i].totalCost = changeTotal ( documentList[i].cost, documentList[i].quantity ).toFixed(2); 
 			setDocumentList([...documentList]); 
 		}
 	}
@@ -458,7 +458,7 @@ const DocumentRowPurchase = (props) => {
 				{props.item.unit_name}
 			</td>
 			<td className='col-2'>
-				<input  className='text-end w-100' type="text" name="cost" value={props.item.cost} onChange={(e) => props.changeCost (e, props.i)} /> 
+				<input  className='text-end w-100' type="text" name="cost" value={props.item.cost.toFixed} onChange={(e) => props.changeCost (e, props.i)} /> 
 			</td>
 			<td className='col-2'>
 				<input  className='text-end w-100' type="text" name="quantity" value={props.item.quantity} onChange={(e) => props.changeQuantity (e, props.i)} /> 
