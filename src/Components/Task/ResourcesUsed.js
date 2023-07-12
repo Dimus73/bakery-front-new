@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {useDispatch , useSelector } from "react-redux";
+import { setLoader } from "../../redux/action";
 import { useNavigate } from "react-router-dom";
 import { setIngredientsListToMove } from "../../redux/action";
 
@@ -32,8 +33,10 @@ const ResourcesUsed = (props) => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			console.log('Resource from DB=>', data, dataJS);
 			if (data.ok) {
 				setResource (dataJS);
@@ -41,6 +44,7 @@ const ResourcesUsed = (props) => {
 				alert(`Error getting list of recipes. Status: ${data.status}. Message: ${dataJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of recipes. Message: ${error}`)
 		}

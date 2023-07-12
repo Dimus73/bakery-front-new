@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector  } from 'react-redux'
+import { setLoader } from '../../redux/action';
 import { setIngredientsListToMove } from '../../redux/action';
 import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
@@ -71,8 +72,10 @@ const Document = (props) => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			console.log('Ingredients list:', data, dataJS);
 			if (data.ok) {
 				setIngredientsList (dataJS);
@@ -81,6 +84,7 @@ const Document = (props) => {
 				alert(`Error getting list of ingredients. Status: ${data.status}. Message: ${dataJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of ingredients. Message: ${error}`)
 		}
@@ -145,8 +149,10 @@ const Document = (props) => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const result = await fetch(URL, reqData);
 			const resultJS = await result.json();
+			dispatch ( setLoader (true) );
 			if (result.ok){
 				setEditMode(EDIT_MODE.EDIT);
 				resultJS.docDetail.push({...blankDocumentTable})
@@ -158,6 +164,7 @@ const Document = (props) => {
 				alert(`Error getting Document. Status: ${result.status}. Message: ${resultJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting Document. Message: ${error}`)		
 		}
@@ -200,8 +207,10 @@ const Document = (props) => {
 			});
 	
 			try {
+				dispatch ( setLoader (true) );
 				const result = await fetch(URL, reqData);
 				const resultJS = await result.json();
+				dispatch ( setLoader (false) );
 				// console.log('After saving data:', resultJS);
 				if (result.ok){
 					setEditMode(EDIT_MODE.EDIT);
@@ -217,6 +226,7 @@ const Document = (props) => {
 				}
 	
 			} catch (error) {
+				dispatch ( setLoader (false) );
 				console.log(error);
 				alert (`Error getting list of recipes. Message: ${error}`)		
 			}

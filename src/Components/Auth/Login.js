@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from '../../redux/action';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { setLoader } from '../../redux/action';
 import './Login.css'
 
 const Login = () => {
@@ -29,10 +30,13 @@ const Login = () => {
 					password,
 				})
 			}
-			console.log(reqData);
+			// console.log(reqData);
 
+			dispatch (setLoader(true));
 			const data = await fetch(URL, reqData); 
 			const result = await data.json()
+			dispatch (setLoader(false));
+			
 			if (data.ok) {
 				localStorage.setItem( 'user', JSON.stringify (result) );
 				dispatch(setUser(result));

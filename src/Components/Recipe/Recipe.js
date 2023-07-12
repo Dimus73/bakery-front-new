@@ -1,13 +1,15 @@
 import './Recipe.css'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
+import { setLoader } from '../../redux/action'
 import getAll from '../../Utils/getListFromBase'
 import BlockTable from './RecipeTable'
 
 
 const Recipe = (props) => {
 	const user = useSelector (state => state.user);
+	const dispatch = useDispatch ();
 	const emptyRecipe = {
 		name : '',
 		finish_quantity : 1,
@@ -91,8 +93,11 @@ const Recipe = (props) => {
 			},
 		}
 		try {
+
+			dispatch ( setLoader (true) );
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			if (data.ok) {
 				dataJS.ingredients.push({})
 				dataJS.equipments.push({})
@@ -102,6 +107,7 @@ const Recipe = (props) => {
 				alert(`Error getting recipes detail. Status: ${data.status}. Message: ${dataJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting recipes detail. Message: ${error}`)
 		}
@@ -198,8 +204,10 @@ const Recipe = (props) => {
 		}
 		try {
 			console.log('Result:','result');
+			dispatch ( setLoader (true) );
 			const result = await fetch (URL, reqData);
 			const resultJS = await result.json();
+			dispatch ( setLoader (false) );
 			console.log('Result:',result);
 			if (result.ok){
 				alert('The document was successfully saved and completed');
@@ -209,6 +217,7 @@ const Recipe = (props) => {
 			}
 	
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(`Error while saving recipe. Message: ${error}`);
 			alert (`Error while saving recipe. Message: ${error}`)
 		}
@@ -238,8 +247,10 @@ const Recipe = (props) => {
 			body : JSON.stringify (data)
 		}
 		try {
+			dispatch ( setLoader (true) );
 			const res = await fetch (URL, reqData);
 			const resJS = await res.json()
+			dispatch ( setLoader (false) );
 			if ( res.ok ) {
 				alert ('Recipe update successful ')
 			} else {
@@ -247,6 +258,7 @@ const Recipe = (props) => {
 				alert (`Error in updating. Status:${res.status}. Message: ${resJS}`)
 			}	
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(`Error while UPDATING recipe. Message: ${error}`);
 			alert (`Error while UPDATING recipe. Message: ${error}`)
 		}

@@ -2,13 +2,15 @@ import './RecipeDetailView.css'
 import { useParams, useNavigate } from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import {emptyRecipe} from './EmptyRecipe'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import { setLoader } from '../../redux/action';
 
 const RecipeDetailView = (props) => {
 
 	const {id} = useParams();
 	const [ recipe, setRecipe ] = useState(emptyRecipe);
 	const user = useSelector (state => state.user)
+	const dispatch = useDispatch ();
 	const navigate = useNavigate() ;
 
 	const  getRecipe = async (id) => {
@@ -22,18 +24,21 @@ const RecipeDetailView = (props) => {
 			}
 		}
 
-		// try {
+		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			if (data.ok) {
 				setRecipe (dataJS)
 				console.log(dataJS);
 				console.log('Call');
 			}	
-		// } catch (error) {
-		// 	console.log(error);
-		// 	alert (`Error getting recipes detail. Message: ${error}`)
-		// }
+		} catch (error) {
+			dispatch ( setLoader (false) );
+			console.log(error);
+			alert (`Error getting recipes detail. Message: ${error}`)
+		}
 	}
 
 	const goBack = (i) => {

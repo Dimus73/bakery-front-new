@@ -1,5 +1,6 @@
 export const SET_USER = 'SET_USER'
 export const SET_INGREDIENTS_LIST = 'SET_INGREDIENTS_LIST'
+export const SET_LOADER = 'SET_LOADER'
 
 let initState = ""
 try {
@@ -28,7 +29,8 @@ try {
 		}
 }
 
-initState.ingredientsForMove = []
+initState.ingredientsForMove = [];
+initState.loader = true;
 
 export const reducer = (state = initState, action = {}) => {
 	switch (action.type){
@@ -36,6 +38,8 @@ export const reducer = (state = initState, action = {}) => {
 			return ( { ...state, user:action.payload } )
 		case SET_INGREDIENTS_LIST :
 			return ( {...state, ingredientsForMove: action.payload} )
+		case SET_LOADER :
+			return ({ ...state, loader:action.payload})
 		default:
 			return ({...state})
 

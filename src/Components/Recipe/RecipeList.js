@@ -1,12 +1,20 @@
-import { useSelector  } from "react-redux";
+import { useSelector, useDispatch  } from "react-redux";
 import {useState, useEffect} from 'react';
 import { Link } from "react-router-dom";
 import { useNavigate  } from "react-router-dom";
 import './RecipeList.css'
+import { setLoader } from "../../redux/action";
 
 const RecipeList = () =>{
 	const user = useSelector (state => state.user)
 	const [recipeList, setRecipeList] = useState([]);
+	const dispatch = useDispatch();
+	// const override: CSSProperties = {
+	// 	display: "block",
+	// 	margin: "0 auto",
+	// 	borderColor: "red",
+	// };
+	
 	const navigate = useNavigate();
 
 	const getRecipeList = async () => {
@@ -22,8 +30,10 @@ const RecipeList = () =>{
 		}
 
 		try {
+			dispatch (setLoader(true));
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch (setLoader(false));
 			console.log(data, dataJS);
 			if (data.ok) {
 				setRecipeList (dataJS);
@@ -44,7 +54,7 @@ const RecipeList = () =>{
 
 	return (
 		<div>
-				<div className="row g-4">
+			<div className="row g-4">
 					{recipeList.map((value, i) => <RecipeCard item={value} i={i} navigate ={navigate}/>)}
 				</div>
 		</div>
@@ -57,6 +67,7 @@ const RecipeCard = (props) => {
 	return(
 
 	<div key={props.i} key1={props.i} className="col-12 col-md-6 col-lg-4 col-xl-3" >
+		
     <div className="bg-white shadow shadow-lg">
 			<div className="img-cont1">
 				<div className="img-cont2">

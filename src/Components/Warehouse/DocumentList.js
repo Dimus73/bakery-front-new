@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSelector  } from 'react-redux'
+import { useSelector, useDispatch  } from 'react-redux';
+import { setLoader } from '../../redux/action';
 import { useNavigate, Link  } from "react-router-dom";
 import { DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
 
@@ -7,6 +8,7 @@ import { DOCUMENT_STATUS, DOCUMENT_TYPE} from './Constants'
 
 const DocumentList = () => {
 	const user = useSelector (state => state.user);
+	const dispatch = useDispatch ();
 	const navigate = useNavigate ();
 
 	const tDate = new Date();
@@ -28,8 +30,10 @@ const DocumentList = () => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch (URL+'/?active=true', reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			console.log('GET List dataJS =>', dataJS);
 			if (data.ok) {
 				setDocumentList ( [...dataJS] );
@@ -40,6 +44,7 @@ const DocumentList = () => {
 				alert(`Error getting list of documents. Status: ${data.status}. Message: ${dataJS.msg}`)
 			} 
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of documents. Message: ${error}`)		
 

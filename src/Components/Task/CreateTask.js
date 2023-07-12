@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useSelector  } from 'react-redux'
+import { useSelector, useDispatch  } from 'react-redux'
+import { setLoader } from '../../redux/action';
 import { useNavigate, useParams } from "react-router-dom";
 import { emptyRecipe } from '../Recipe/EmptyRecipe';
 import  ResourcesUsed  from './ResourcesUsed';
@@ -33,6 +34,7 @@ const CreateTask = () => {
 	const [editMode, setEditMode] = useState (EDIT_MODE.CREATE)
 
 	const user = useSelector ( (state) =>(state.user) )
+	const dispatch = useDispatch ();
 	const tDate = new Date()
 	
 	const [task, setTask] = useState({
@@ -66,8 +68,10 @@ const CreateTask = () => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch(URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			// console.log(data, dataJS);
 			if (data.ok) {
 				setRecipeList (dataJS);
@@ -75,6 +79,7 @@ const CreateTask = () => {
 				alert(`Error getting list of recipes. Status: ${data.status}. Message: ${dataJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of recipes. Message: ${error}`)
 		}
@@ -108,8 +113,10 @@ const CreateTask = () => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const result = await fetch(URL, reqData);
 			const resultJS = await result.json();
+			dispatch ( setLoader (false) );
 			if (result.ok){
 				setEditMode(EDIT_MODE.EDIT);
 				// console.log('DATE :', resultJS.date);
@@ -138,6 +145,7 @@ const CreateTask = () => {
 				alert(`Error getting list of recipes. Status: ${result.status}. Message: ${resultJS.msg}`)
 			}
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of recipes. Message: ${error}`)		
 		}
@@ -169,8 +177,10 @@ const CreateTask = () => {
 			}
 	
 			try {
+				dispatch ( setLoader (true) );
 				const result = await fetch(URL, reqData);
 				const resultJS = await result.json();
+				dispatch ( setLoader (false) );
 				// console.log('After saving data:', resultJS);
 				if (result.ok){
 					// console.log('After saving data:', resultJS);
@@ -188,6 +198,7 @@ const CreateTask = () => {
 				}
 	
 			} catch (error) {
+				dispatch ( setLoader (false) );
 				console.log(error);
 				alert (`Error getting list of recipes. Message: ${error}`)		
 			}

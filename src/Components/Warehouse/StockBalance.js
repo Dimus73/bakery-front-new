@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoader } from "../../redux/action";
 import { useNavigate } from "react-router-dom";
 import { setIngredientsListToMove } from "../../redux/action";
 import './StockBalance.css';
@@ -8,6 +9,7 @@ import './StockBalance.css';
 const StockBalance = () => {
 	const [stockList, setStockList] = useState([]);
 	const user = useSelector ((state) => state.user);
+	const dispatch = useDispatch ();
 	const navigate = useNavigate();
 
 // ---------------------------
@@ -28,8 +30,10 @@ const getIngredientsList = async () => {
 	}
 
 	try {
+		dispatch ( setLoader (true) );
 		const data = await fetch(URL, reqData);
 		const dataJS = await data.json();
+		dispatch ( setLoader (false) );
 		console.log('Ingredients list:', data, dataJS);
 		if (data.ok) {
 			setStockList (dataJS);
@@ -38,6 +42,7 @@ const getIngredientsList = async () => {
 			alert(`Error getting list of ingredients. Status: ${data.status}. Message: ${dataJS.msg}`)
 		}
 	} catch (error) {
+		dispatch ( setLoader (false) );
 		console.log(error);
 		alert (`Error getting list of ingredients. Message: ${error}`)
 	}

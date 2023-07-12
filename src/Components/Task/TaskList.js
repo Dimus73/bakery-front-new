@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useSelector  } from 'react-redux'
+import { useSelector, useDispatch  } from 'react-redux'
+import { setLoader } from '../../redux/action';
 import { useNavigate, Link  } from "react-router-dom";
 import ResourcesUsed from './ResourcesUsed';
 import './TaskList.css';
 
 const TaskList = () => {
 	const user = useSelector (state => state.user);
+	const dispatch = useDispatch ();
 
 	const tDate = new Date();
 	const [ taskList, setTaskList ] = useState ( [ { date:tDate.toISOString() } ] );
@@ -25,8 +27,10 @@ const TaskList = () => {
 		}
 
 		try {
+			dispatch ( setLoader (true) );
 			const data = await fetch (URL, reqData);
 			const dataJS = await data.json();
+			dispatch ( setLoader (false) );
 			// console.log('GET List dataJS =>', dataJS);
 			if (data.ok) {
 				setTaskList ( [...dataJS] );
@@ -37,6 +41,7 @@ const TaskList = () => {
 				alert(`Error getting list of recipes. Status: ${data.status}. Message: ${dataJS.msg}`)
 			} 
 		} catch (error) {
+			dispatch ( setLoader (false) );
 			console.log(error);
 			alert (`Error getting list of recipes. Message: ${error}`)		
 

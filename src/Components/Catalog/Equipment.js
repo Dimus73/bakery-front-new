@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { FieldCheck } from '../../Utils/Fieldcheck';
 import './Ingredients.css';
 import { Button, Modal } from 'react-bootstrap'
+import { setLoader } from '../../redux/action';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const URL = BASE_URL + '/api/catalog/';
@@ -19,6 +20,8 @@ const Equipment = () =>{
 
 	const user = useSelector (state => state.user)
 
+	const dispatch = useDispatch();
+
 	const getRequest = (URL, toDo) => {
 		const reqData = {
 			method: "GET",
@@ -27,10 +30,12 @@ const Equipment = () =>{
 				'Authorization' : 'Bearer ' + user.token
 			},
 		}
-
+	
+		dispatch (setLoader(true));
 		fetch(URL, reqData)
 		.then(data =>  {
 			// console.log('From Get:', data);
+			dispatch (setLoader(false));
 			if (!data.ok) {
 				throw new Error (`Error getting data. Status ${data.status}. Message `)
 			}
@@ -40,6 +45,7 @@ const Equipment = () =>{
 			toDo(data)
 		})
 		.catch((err) => {
+			dispatch (setLoader(false));
 			alert ('There was a communication error with the server while reading data. Check server operation and try again.')
 			console.log('getRequest ERROR:', err);
 		})

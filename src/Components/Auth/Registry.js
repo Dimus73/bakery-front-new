@@ -1,11 +1,13 @@
 import {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { setLoader } from '../../redux/action';
 import './Registry.css'
 
 const Registry = () => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL
 	const URL = '/api/auth/registration'
 	const user = useSelector (state => state.user)
+	const dispatch = useDispatch() ;
 
 	const addUser = (e) => {
 		e.preventDefault();
@@ -39,12 +41,15 @@ const Registry = () => {
 		}
 
 		try {
+			dispatch (setLoader(true));
 			const res = await fetch(BASE_URL+URL, reqData);
+			dispatch (setLoader(false));
+
 			console.log(res);	
-			const resJS = await res.json()
+			const resJS = await res.json();
 			console.log(resJS);
 			if (res.ok) {
-				alert (`User ${username} added successfully`)
+				alert (`User ${username} added successfully`);
 			} else {
 				alert (`Error adding user. Error:${res.status}. Message:"${resJS.msg}"`)
 			}
