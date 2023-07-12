@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { FieldCheck } from '../../Utils/Fieldcheck';
 import './Ingredients.css';
 import { Button, Modal } from 'react-bootstrap'
+import { setLoader } from '../../redux/action';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const URL = BASE_URL + '/api/catalog/';
@@ -19,6 +20,7 @@ const Ingredients = () =>{
 	const [showModal, setShowModal] = useState(false);
 
 	const user = useSelector (state => state.user);
+	const dispatch = useDispatch();
 
 	const getRequest = (URL, toDo) => {
 		const reqData = {
@@ -28,9 +30,11 @@ const Ingredients = () =>{
 				'Authorization' : 'Bearer ' + user.token
 			},
 		}
-
+		
+		dispatch ( setLoader( true ) );
 		fetch(URL, reqData)
 		.then(data =>  {
+			dispatch ( setLoader( false ) );
 			// console.log('From Get:', data);
 			if (!data.ok) {
 				throw new Error (`Error getting data. Status ${data.status}. Message `)
@@ -123,11 +127,14 @@ const nameUpdateValidation = (id, name) => {
 
 			setCurrentItem ({id:'', name:'', unit_id:1});
 
+			dispatch ( setLoader (true) );
 			fetch (URL+URL_Ingredients, reqData)
 			.then (data=> data.json())
 			.then (data => {
+				dispatch ( setLoader (false) );
 				setIngredients(data)})
 			.catch(err => {
+				dispatch ( setLoader (false) );
 				alert ('There was a communication error with the server while saving data. Check server operation and try again.')
 				console.log("ERROR when saving data", err)
 			})
@@ -155,10 +162,15 @@ const nameUpdateValidation = (id, name) => {
 
 			setCurrentItem ({id:'', name:'', unit_id:1});
 
+			dispatch ( setLoader (true) );
 			fetch (URL+URL_Ingredients, reqData)
-			.then (data => data.json())
+			.then (data => {
+				dispatch ( setLoader(false) );
+				return data.json();
+			})
 			.then (data => setIngredients(data)) 
 			.catch((err) => {
+				dispatch ( setLoader (false) );
 				alert ('There was a communication error with the server while saving data. Check server operation and try again.')
 				console.log('getRequest ERROR:', err);
 			})
