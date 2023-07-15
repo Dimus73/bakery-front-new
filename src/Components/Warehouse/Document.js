@@ -468,7 +468,7 @@ const DocumentRowPurchase = (props) => {
 				{props.item.unit_name}
 			</td>
 			<td className='col-2'>
-				<input  className='text-end w-100' type="text" name="cost" value={props.item.cost.toFixed} onChange={(e) => props.changeCost (e, props.i)} /> 
+				<input  className='text-end w-100' type="text" name="cost" value={props.item.cost} onChange={(e) => props.changeCost (e, props.i)} /> 
 			</td>
 			<td className='col-2'>
 				<input  className='text-end w-100' type="text" name="quantity" value={props.item.quantity} onChange={(e) => props.changeQuantity (e, props.i)} /> 
