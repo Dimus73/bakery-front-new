@@ -152,7 +152,7 @@ const Document = (props) => {
 			dispatch ( setLoader (true) );
 			const result = await fetch(URL, reqData);
 			const resultJS = await result.json();
-			dispatch ( setLoader (true) );
+			dispatch ( setLoader (false) );
 			if (result.ok){
 				setEditMode(EDIT_MODE.EDIT);
 				resultJS.docDetail.push({...blankDocumentTable})
