@@ -74,7 +74,7 @@ const Login = () => {
 			</div> */}
 			<div className='container'>
 				<div className='row justify-content-center'>
-					<div className='col-11 bg-white p-0'>
+					<div className='col-9 col-md-6 col-lg-4 bg-white p-0'>
 						<div className='m-3' style={{backgroundColor:'#FDEDDA'}}>
 							<main class="form-signin w-100 m-auto">
 								<form className='form-signin' action="" onSubmit={logInFunction}>
